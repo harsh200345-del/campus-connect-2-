@@ -1,0 +1,247 @@
+{
+  "users": [
+    {
+      "id": "user-rohan",
+      "phone": "9876543210",
+      "name": "Rohan Sharma",
+      "primaryRole": "borrower",
+      "department": "Computer Science & Engineering (2nd Year)",
+      "studentId": "RKGIT/2023/CS-184",
+      "hostel": "Day Scholar (Near RKGIT Campus)",
+      "avatar": "👨‍🎓",
+      "rating": 4.9,
+      "reviewsCount": 16,
+      "walletBalance": 500,
+      "escrowBalance": 0,
+      "earnedTotal": 40
+    },
+    {
+      "id": "user-aman",
+      "phone": "9812345678",
+      "name": "Aman Verma",
+      "primaryRole": "lender",
+      "department": "Electronics & Communication (3rd Year)",
+      "studentId": "RKGIT/2022/EC-042",
+      "hostel": "Boys Hostel 2 (BH-2), Room 304",
+      "avatar": "🧑‍💻",
+      "rating": 5.0,
+      "reviewsCount": 29,
+      "walletBalance": 850,
+      "escrowBalance": 0,
+      "earnedTotal": 1420
+    },
+    {
+      "id": "user-priya",
+      "phone": "9898989898",
+      "name": "Priya Singh",
+      "primaryRole": "lender",
+      "department": "Information Technology (2nd Year)",
+      "studentId": "RKGIT/2023/IT-091",
+      "hostel": "Girls Hostel 1 (GH-1), Room 112",
+      "avatar": "👩‍🎓",
+      "rating": 4.8,
+      "reviewsCount": 19,
+      "walletBalance": 450,
+      "escrowBalance": 0,
+      "earnedTotal": 580
+    },
+    {
+      "id": "user-kartik",
+      "phone": "9712345678",
+      "name": "Kartik Dixit",
+      "primaryRole": "lender",
+      "department": "Mechanical Engineering (4th Year)",
+      "studentId": "RKGIT/2021/ME-015",
+      "hostel": "Boys Hostel 1 (BH-1), Room 218",
+      "avatar": "👷",
+      "rating": 4.95,
+      "reviewsCount": 38,
+      "walletBalance": 1200,
+      "escrowBalance": 0,
+      "earnedTotal": 2650
+    }
+  ],
+  "items": [
+    {
+      "id": "item-1",
+      "title": "Casio fx-991ES Plus Scientific Calculator",
+      "category": "Calculators",
+      "pricePerDay": 25,
+      "deposit": 100,
+      "ownerId": "user-aman",
+      "hostelLocation": "Boys Hostel 2 (BH-2), Room 304",
+      "pickupSpot": "Campus Canteen (Nescafe Counter)",
+      "urgent15Min": true,
+      "condition": "Like New - 417 Functions, Solar + Battery",
+      "description": "Essential for engineering practicals and end-semester university exams. Approved for AKTU examinations. Available on-demand!",
+      "image": "https://images.unsplash.com/photo-1594980596870-8aa52a78d8cd?w=600&auto=format&fit=crop&q=80",
+      "isAvailable": true,
+      "createdAt": "2026-11-10T10:00:00.000Z"
+    },
+    {
+      "id": "item-2",
+      "title": "Sterile White Lab Coat / Apron (Size L)",
+      "category": "Lab Coats & Uniforms",
+      "pricePerDay": 20,
+      "deposit": 50,
+      "ownerId": "user-aman",
+      "hostelLocation": "Boys Hostel 2 (BH-2), Room 304",
+      "pickupSpot": "Chemistry Lab / Admin Block",
+      "urgent15Min": true,
+      "condition": "Washed, Ironed & Stain-Free",
+      "description": "Mandatory 100% cotton lab coat required for Chemistry, Physics, and Biotech labs. Keep an extra in your bag or rent in 5 mins!",
+      "image": "https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?w=600&auto=format&fit=crop&q=80",
+      "isAvailable": true,
+      "createdAt": "2026-11-11T11:30:00.000Z"
+    },
+    {
+      "id": "item-3",
+      "title": "Omega Mini Drafter + Set Squares (Engg. Drawing)",
+      "category": "Drafting & Tools",
+      "pricePerDay": 30,
+      "deposit": 150,
+      "ownerId": "user-kartik",
+      "hostelLocation": "Boys Hostel 1 (BH-1), Room 218",
+      "pickupSpot": "Mechanical Workshop / Drawing Hall 3",
+      "urgent15Min": true,
+      "condition": "Calibrated & Smooth Clamp Screw",
+      "description": "Standard steel bar mini drafter with 360-degree protractor head. Ideal for first/second year Engineering Graphics drawing sheets.",
+      "image": "https://images.unsplash.com/photo-1581291518857-4e27b48ff24e?w=600&auto=format&fit=crop&q=80",
+      "isAvailable": true,
+      "createdAt": "2026-11-09T08:15:00.000Z"
+    },
+    {
+      "id": "item-4",
+      "title": "Digital Multimeter with Needle Probes",
+      "category": "Electronics & Kits",
+      "pricePerDay": 35,
+      "deposit": 150,
+      "ownerId": "user-aman",
+      "hostelLocation": "Boys Hostel 2 (BH-2), Room 304",
+      "pickupSpot": "ECE Hardware Lab / Nescafe Stall",
+      "urgent15Min": false,
+      "condition": "New 9V Battery & Continuity Buzzer Active",
+      "description": "Precision digital multimeter for breadboard circuit debugging, measuring DC/AC voltage, current, and resistor values.",
+      "image": "https://images.unsplash.com/photo-1581092160607-ee22621dd758?w=600&auto=format&fit=crop&q=80",
+      "isAvailable": true,
+      "createdAt": "2026-11-08T14:20:00.000Z"
+    },
+    {
+      "id": "item-5",
+      "title": "Workshop Safety Khaki Apron + Protective Goggles",
+      "category": "Lab Coats & Uniforms",
+      "pricePerDay": 20,
+      "deposit": 60,
+      "ownerId": "user-kartik",
+      "hostelLocation": "Boys Hostel 1 (BH-1), Room 218",
+      "pickupSpot": "Central Workshop Gate",
+      "urgent15Min": true,
+      "condition": "Tear-resistant Heavy Denim/Khaki",
+      "description": "Mandatory protective gear for Mechanical Fitting, Carpentry, Foundry, and Welding workshops. Comes with transparent eye shield.",
+      "image": "https://images.unsplash.com/photo-1504917599217-d4dc5ebe6122?w=600&auto=format&fit=crop&q=80",
+      "isAvailable": true,
+      "createdAt": "2026-11-07T09:45:00.000Z"
+    },
+    {
+      "id": "item-6",
+      "title": "Higher Engineering Mathematics - B.S. Grewal (44th Ed.)",
+      "category": "Books & Notes",
+      "pricePerDay": 15,
+      "deposit": 100,
+      "ownerId": "user-priya",
+      "hostelLocation": "Girls Hostel 1 (GH-1), Room 112",
+      "pickupSpot": "Central Library Entrance",
+      "urgent15Min": false,
+      "condition": "Hardcover, Highlighted Important AKTU Solved Questions",
+      "description": "The definitive engineering mathematics book for semester exams. Perfect for quick overnight revision before exam week.",
+      "image": "https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?w=600&auto=format&fit=crop&q=80",
+      "isAvailable": true,
+      "createdAt": "2026-11-06T16:00:00.000Z"
+    },
+    {
+      "id": "item-7",
+      "title": "Arduino Uno R3 Starter Kit + Sensor Pack",
+      "category": "Electronics & Kits",
+      "pricePerDay": 40,
+      "deposit": 200,
+      "ownerId": "user-rohan",
+      "hostelLocation": "Day Scholar / Academic Block C",
+      "pickupSpot": "CS Lab 3 / Academic Block",
+      "urgent15Min": false,
+      "condition": "Complete with 65 Jumper Wires & Breadboard",
+      "description": "Microcontroller board, ultrasonic sensor, servo motor, and LCD display. Great for completing semester mini-projects.",
+      "image": "https://images.unsplash.com/photo-1553406830-ef2513450d76?w=600&auto=format&fit=crop&q=80",
+      "isAvailable": true,
+      "createdAt": "2026-11-05T12:10:00.000Z"
+    }
+  ],
+  "rentals": [
+    {
+      "id": "rental-101",
+      "itemId": "item-1",
+      "borrowerId": "user-rohan",
+      "lenderId": "user-aman",
+      "durationDays": 1,
+      "rentAmount": 25,
+      "depositAmount": 100,
+      "totalAmount": 125,
+      "status": "REQUESTED",
+      "meetupSpot": "Campus Canteen (Nescafe Counter)",
+      "pickupOtp": "8492",
+      "pickupQrCode": "RKGIT-HANDSHAKE-PICKUP-8492-RENTAL101",
+      "returnOtp": "3170",
+      "returnQrCode": "RKGIT-HANDSHAKE-RETURN-3170-RENTAL101",
+      "requestedAt": "2026-11-13T09:15:00.000Z",
+      "note": "Practical exam in 15 mins! Urgent need for Casio fx-991ES."
+    }
+  ],
+  "chats": {
+    "campus-global": [
+      {
+        "id": "msg-g1",
+        "senderId": "user-rohan",
+        "text": "📢 Emergency! Practical exam in 15 mins at Lab 2. Anyone have a Casio fx-991ES calculator near Canteen?",
+        "timestamp": "2026-11-13T09:10:00.000Z"
+      },
+      {
+        "id": "msg-g2",
+        "senderId": "user-aman",
+        "text": "Hey Rohan, I have listed my Casio 991ES and Lab coat on Campus Share! Send a request, I'm at BH-2.",
+        "timestamp": "2026-11-13T09:11:30.000Z"
+      },
+      {
+        "id": "msg-g3",
+        "senderId": "user-kartik",
+        "text": "If anyone needs a Mini Drafter or Workshop Khaki Apron for 1st Year graphics, check BH-1 Room 218 listings.",
+        "timestamp": "2026-11-13T09:12:15.000Z"
+      }
+    ],
+    "rental-101": [
+      {
+        "id": "msg-1",
+        "senderId": "user-rohan",
+        "text": "Hey Aman! I have my practical exam in 15 mins and forgot my Casio fx-991ES calculator at home. Can I rent yours?",
+        "timestamp": "2026-11-13T09:15:20.000Z"
+      },
+      {
+        "id": "msg-2",
+        "senderId": "user-aman",
+        "text": "Hey Rohan! Absolutely. I am at BH-2 hostel desk right now. Accept the request and let's meet at the Canteen!",
+        "timestamp": "2026-11-13T09:16:05.000Z"
+      },
+      {
+        "id": "msg-3",
+        "senderId": "user-rohan",
+        "text": "Awesome! I am heading towards the Canteen Nescafe counter. See you in 3 minutes with the handshake QR/OTP!",
+        "timestamp": "2026-11-13T09:16:45.000Z"
+      }
+    ]
+  },
+  "stats": {
+    "totalMoneySaved": 18450,
+    "totalEarnedByStudents": 8920,
+    "completedHandshakes": 142,
+    "activeListings": 27,
+    "wasteAvertedKg": 58
+  }
+}

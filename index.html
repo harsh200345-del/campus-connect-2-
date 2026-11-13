@@ -1,0 +1,831 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Campus Share | P2P Rental Platform for RKGIT</title>
+  <link rel="stylesheet" href="style.css?v=3">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <!-- Top College Bar -->
+  <header class="top-banner">
+    <div class="banner-inner container">
+      <div class="college-info">
+        <span class="gate-badge">🏛️ RAJ KUMAR GOEL INSTITUTE OF TECHNOLOGY (ESTD. 2000)</span>
+        <span class="location-tag">📍 Delhi-Meerut Road, Ghaziabad</span>
+      </div>
+      <div class="banner-actions">
+        <button id="btnOpenLoginModal" class="btn-ghost-sm">📱 Mobile OTP Login</button>
+        <button id="btnResetDemo" class="btn-ghost-sm" title="Restore comic strip scenario">🔄 Reset Demo</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Local File Notice Banner -->
+  <div id="fileProtocolNotice" class="container" style="display: none; padding-top: 0.5rem;">
+    <div style="background: #fef3c7; border: 1.5px solid #f59e0b; color: #92400e; padding: 0.6rem 1rem; border-radius: 8px; font-size: 0.82rem; display: flex; justify-content: space-between; align-items: center; gap: 0.5rem;">
+      <span>💡 <strong>Important Tip:</strong> You opened this file directly (<code>file://</code>). For the full multi-device live server, double-click <strong>start.bat</strong> in the project folder and open <a href="http://localhost:3000" style="color: #881337; font-weight: 800; text-decoration: underline;">http://localhost:3000</a>. (Offline Mode is now active so OTP and testing will work right here!)</span>
+      <button onclick="this.parentElement.parentElement.style.display='none'" style="background:none;border:none;cursor:pointer;font-weight:800;color:#92400e;font-size:1rem;">✕</button>
+    </div>
+  </div>
+
+  <!-- Main Navbar -->
+  <nav class="navbar">
+    <div class="navbar-inner container">
+      <div class="brand">
+        <div class="brand-logo">CS</div>
+        <div class="brand-text">
+          <div class="brand-title">CAMPUS <span>SHARE</span></div>
+          <div class="brand-subtitle">P2P RENTAL PLATFORM FOR RKGIT</div>
+        </div>
+      </div>
+
+      <!-- PORTAL MODE SELECTOR (Borrower / Buyer vs Lender / Hosteler) -->
+      <div class="portal-selector-card">
+        <div class="portal-selector-label">CHOOSE ACTIVE PORTAL:</div>
+        <div class="portal-toggle-group">
+          <button class="portal-btn active" id="btnPortalBorrower" data-portal="borrower">
+            <span class="portal-icon">🎓</span>
+            <div class="portal-btn-text">
+              <span class="portal-main-txt">Borrower Portal</span>
+              <span class="portal-sub-txt">Rent / Buy Gear</span>
+            </div>
+          </button>
+          <button class="portal-btn" id="btnPortalLender" data-portal="lender">
+            <span class="portal-icon">💼</span>
+            <div class="portal-btn-text">
+              <span class="portal-main-txt">Lender Portal</span>
+              <span class="portal-sub-txt">Lend & Earn</span>
+            </div>
+          </button>
+        </div>
+      </div>
+
+      <!-- User Profile & Wallet Card -->
+      <div class="user-auth-card" id="userAuthCard">
+        <div class="user-meta" id="currentUserMeta">
+          <span class="user-avatar" id="currentUserAvatar">👨‍🎓</span>
+          <div class="user-text-info">
+            <div class="user-name-line">
+              <strong id="currentUserName">Rohan Sharma</strong>
+              <span class="badge-role" id="currentUserRoleTag">Borrower</span>
+            </div>
+            <div class="user-phone-line" id="currentUserPhone">📱 +91 9876543210</div>
+          </div>
+        </div>
+
+        <div class="wallet-badge" id="walletBadge">
+          <div class="wallet-data">
+            <span class="wallet-label">Wallet</span>
+            <span class="wallet-amount" id="userWalletAmount">₹500</span>
+          </div>
+          <div class="escrow-data" title="Refundable security deposit locked in escrow">
+            <span class="escrow-label">Escrow</span>
+            <span class="escrow-amount" id="userEscrowAmount">₹0</span>
+          </div>
+        </div>
+
+        <button class="btn-switch-user-sm" id="btnChangeUser" title="Switch Account or Login with Mobile Number">⇄ Switch</button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Portal Context Indicator Bar -->
+  <div class="portal-indicator-bar" id="portalIndicatorBar">
+    <div class="container indicator-inner">
+      <div class="indicator-text">
+        <span class="indicator-badge" id="portalIndicatorBadge">🎓 BORROWER PORTAL ACTIVE</span>
+        <span class="indicator-desc" id="portalIndicatorDesc">Find Casio fx-991ES, lab coats, and engineering equipment for urgent practical exams.</span>
+      </div>
+      <div class="indicator-quick-stats">
+        <span id="portalQuickStat1">⚡ 15-Min Campus Delivery</span>
+        <span id="portalQuickStat2">🔒 Dynamic OTP Protected</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Dynamic Tabs Navigation -->
+  <div class="tabs-nav-bar">
+    <div class="container tabs-container" id="tabsContainer">
+      <!-- Injected dynamically based on Borrower vs Lender portal -->
+    </div>
+  </div>
+
+  <!-- Main Content Container -->
+  <main class="container main-content">
+
+    <!-- ================= SECTION: BROWSE & RENT (Borrower Portal) ================= -->
+    <section id="tab-browse" class="tab-section active">
+      <!-- Urgent Exam Need Alert Banner (The Problem from comic) -->
+      <div class="urgent-banner">
+        <div class="urgent-content">
+          <div class="urgent-pill">⚡ THE PROBLEM - UNMET NEED</div>
+          <h2>Practical Exam in 15 mins? No lab coat or Casio fx-991ES?</h2>
+          <p>Buying new is too expensive. Don't panic! Rent verified gear from peers in your hostel within 5 to 15 minutes.</p>
+        </div>
+        <div class="urgent-toggle-wrapper">
+          <label class="switch-urgent" for="urgentToggle">
+            <input type="checkbox" id="urgentToggle">
+            <span class="slider-urgent"></span>
+          </label>
+          <span class="urgent-label-text">⚡ 15-Min Flash Pickup Only</span>
+        </div>
+      </div>
+
+      <!-- Search & Category Filters -->
+      <div class="search-filter-card">
+        <div class="search-input-box">
+          <span class="search-icon">🔍</span>
+          <input type="text" id="searchInput" placeholder="Search Casio fx-991ES, lab coat, mini drafter, notes, multimeter...">
+          <button id="btnClearSearch" class="btn-clear hidden">✕</button>
+        </div>
+
+        <div class="category-pills" id="categoryPills">
+          <button class="cat-pill active" data-cat="All">All Items</button>
+          <button class="cat-pill" data-cat="Calculators">🧮 Calculators (fx-991ES)</button>
+          <button class="cat-pill" data-cat="Lab Coats & Uniforms">🥼 Lab Coats & Aprons</button>
+          <button class="cat-pill" data-cat="Drafting & Tools">📐 Mini Drafters & Tools</button>
+          <button class="cat-pill" data-cat="Electronics & Kits">⚡ Electronics & Multimeters</button>
+          <button class="cat-pill" data-cat="Books & Notes">📚 Books & Notes</button>
+        </div>
+      </div>
+
+      <!-- Items Grid Header -->
+      <div class="section-header">
+        <h3 id="itemsCountTitle">Available On-Campus Items (7)</h3>
+        <span class="campus-trust-pill">🛡️ Dynamic OTP/QR Protected Exchanges</span>
+      </div>
+
+      <div class="items-grid" id="itemsGrid">
+        <!-- Rendered by JS -->
+      </div>
+    </section>
+
+    <!-- ================= SECTION: LIST AN ITEM (Lender Portal) ================= -->
+    <section id="tab-list" class="tab-section">
+      <div class="listing-layout">
+        <div class="listing-form-card">
+          <div class="form-header">
+            <span class="form-badge">STEP 1: LEND & EARN</span>
+            <h2>List an Item from Your Hostel Desk</h2>
+            <p>Make extra pocket money from unused stuff lying around in your room!</p>
+          </div>
+
+          <form id="formListItem">
+            <div class="form-group">
+              <label for="itemTitle">Item Title *</label>
+              <input type="text" id="itemTitle" required placeholder="e.g. Casio fx-991ES Plus Scientific Calculator">
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="itemCategory">Category *</label>
+                <select id="itemCategory" required>
+                  <option value="Calculators">🧮 Scientific Calculators</option>
+                  <option value="Lab Coats & Uniforms">🥼 Lab Coats & Aprons</option>
+                  <option value="Drafting & Tools">📐 Drafting Tools & Drafters</option>
+                  <option value="Electronics & Kits">⚡ Electronics & Kits</option>
+                  <option value="Books & Notes">📚 Books & Notes</option>
+                  <option value="General">📦 Other College Essentials</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label for="itemCondition">Condition</label>
+                <input type="text" id="itemCondition" placeholder="e.g. Like New, Clean, Battery OK">
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="itemPrice">Rental Rate (₹ / day) *</label>
+                <div class="input-prefix">
+                  <span>₹</span>
+                  <input type="number" id="itemPrice" min="5" max="500" value="25" required>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="itemDeposit">Refundable Safety Deposit (₹) *</label>
+                <div class="input-prefix">
+                  <span>₹</span>
+                  <input type="number" id="itemDeposit" min="10" max="2000" value="100" required>
+                </div>
+                <small class="helper-text">Returned to borrower after safe return handshake.</small>
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="itemHostel">Your Hostel / Location *</label>
+                <select id="itemHostel" required>
+                  <option value="Boys Hostel 2 (BH-2), Room 304">Boys Hostel 2 (BH-2)</option>
+                  <option value="Boys Hostel 1 (BH-1), Room 218">Boys Hostel 1 (BH-1)</option>
+                  <option value="Girls Hostel 1 (GH-1), Room 112">Girls Hostel 1 (GH-1)</option>
+                  <option value="Girls Hostel 2 (GH-2)">Girls Hostel 2 (GH-2)</option>
+                  <option value="Academic Block C (Day Scholar)">Academic Block C (Day Scholar)</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label for="itemPickupSpot">Preferred Handshake Spot *</label>
+                <select id="itemPickupSpot" required>
+                  <option value="Campus Canteen (Nescafe Counter)">Campus Canteen (Nescafe Counter)</option>
+                  <option value="Central Library Entrance">Central Library Entrance</option>
+                  <option value="Main Gate (Estd. 2000 arch)">RKGIT Main Gate</option>
+                  <option value="Admin Block Porch">Admin Block Porch</option>
+                  <option value="Chemistry & Physics Lab Corridor">Chemistry/Physics Lab Corridor</option>
+                  <option value="Mechanical Workshop Gate">Mechanical Workshop Gate</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="itemImage">Image URL (or select preset)</label>
+              <input type="url" id="itemImage" placeholder="https://images.unsplash.com/..." value="https://images.unsplash.com/photo-1594980596870-8aa52a78d8cd?w=600&auto=format&fit=crop&q=80">
+              <div class="preset-images">
+                <button type="button" class="btn-preset" data-img="https://images.unsplash.com/photo-1594980596870-8aa52a78d8cd?w=600&auto=format&fit=crop&q=80">Casio Calc</button>
+                <button type="button" class="btn-preset" data-img="https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?w=600&auto=format&fit=crop&q=80">Lab Coat</button>
+                <button type="button" class="btn-preset" data-img="https://images.unsplash.com/photo-1581291518857-4e27b48ff24e?w=600&auto=format&fit=crop&q=80">Mini Drafter</button>
+                <button type="button" class="btn-preset" data-img="https://images.unsplash.com/photo-1581092160607-ee22621dd758?w=600&auto=format&fit=crop&q=80">Multimeter</button>
+                <button type="button" class="btn-preset" data-img="https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?w=600&auto=format&fit=crop&q=80">Textbook</button>
+              </div>
+            </div>
+
+            <div class="form-group checkbox-group">
+              <label class="checkbox-label">
+                <input type="checkbox" id="itemUrgent15" checked>
+                <span>⚡ Available for 15-Minute Flash Handshake on Campus</span>
+              </label>
+            </div>
+
+            <div class="form-group">
+              <label for="itemDesc">Item Description & Notes</label>
+              <textarea id="itemDesc" rows="3" placeholder="Condition, battery life, included accessories, or advice for exam use..."></textarea>
+            </div>
+
+            <button type="submit" class="btn-primary-lg">🚀 Publish Listing on RKGIT Campus Share</button>
+          </form>
+        </div>
+
+        <!-- Preview Card -->
+        <div class="listing-preview-col">
+          <div class="preview-sticky">
+            <span class="preview-badge">LIVE PREVIEW</span>
+            <div class="item-card preview-card">
+              <div class="item-img-wrap">
+                <img id="previewImg" src="https://images.unsplash.com/photo-1594980596870-8aa52a78d8cd?w=600&auto=format&fit=crop&q=80" alt="Preview">
+                <span class="item-urgent-badge" id="previewUrgentBadge">⚡ 15-Min Flash</span>
+                <span class="item-cat-badge" id="previewCatBadge">Calculators</span>
+              </div>
+              <div class="item-body">
+                <h4 id="previewTitle">Casio fx-991ES Plus Scientific Calculator</h4>
+                <div class="item-owner-row">
+                  <span class="owner-avatar" id="previewAvatar">🧑‍💻</span>
+                  <div class="owner-text">
+                    <span class="owner-name" id="previewOwnerName">Aman Verma</span>
+                    <span class="owner-loc" id="previewLoc">Boys Hostel 2 (BH-2)</span>
+                  </div>
+                </div>
+                <div class="item-pricing">
+                  <div class="price-daily">
+                    <span class="price-val" id="previewPrice">₹25</span>
+                    <span class="price-unit">/ day</span>
+                  </div>
+                  <div class="price-deposit">
+                    <span class="deposit-lbl">Deposit:</span>
+                    <span class="deposit-val" id="previewDeposit">₹100</span>
+                  </div>
+                </div>
+                <button class="btn-rent-disabled" disabled>Listed by you</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= SECTION: MY LISTINGS INVENTORY (Lender Portal) ================= -->
+    <section id="tab-inventory" class="tab-section">
+      <div class="section-header">
+        <div>
+          <h3>📦 My Listed Equipment (Hostel Desk)</h3>
+          <p style="font-size: 0.85rem; color: var(--text-muted);">Manage equipment you've put up for rent to college peers.</p>
+        </div>
+        <button class="btn-primary-lg" style="width: auto; padding: 0.5rem 1rem;" id="btnGoToListTab">➕ List Another Item</button>
+      </div>
+      <div class="items-grid" id="myInventoryGrid">
+        <!-- Injected by JS -->
+      </div>
+    </section>
+
+    <!-- ================= SECTION: HANDSHAKE & RENTALS (Both Portals) ================= -->
+    <section id="tab-rentals" class="tab-section">
+      <div class="handshake-hero-card">
+        <div class="handshake-hero-header">
+          <span class="handshake-pill">🤝 THE HANDSHAKE - CAMPUS SPOT</span>
+          <h2>Safe Peer-to-Peer Exchange via Dynamic OTP / QR Verification</h2>
+          <p>Instant verification at physical campus meetup spots ensures safe delivery, holds safety deposits in escrow, and prevents fraud.</p>
+        </div>
+      </div>
+
+      <div class="rentals-dashboard-grid">
+        <!-- Rentals List -->
+        <div class="rentals-list-col">
+          <div class="rentals-header-filter">
+            <div class="filter-title">My Campus Rentals (<span id="userRentalsCount">0</span>)</div>
+            <div class="role-filter-indicator" id="roleFilterIndicator">Viewing as Rohan</div>
+          </div>
+
+          <div class="rentals-container" id="rentalsList">
+            <!-- Rendered by JS -->
+          </div>
+        </div>
+
+        <!-- Handshake Action / Verification Workspace -->
+        <div class="handshake-action-col">
+          <div class="handshake-card" id="handshakeCard">
+            <div class="handshake-empty-state" id="handshakeEmptyState">
+              <div class="empty-icon">📱</div>
+              <h3>Select a Rental to View Handshake</h3>
+              <p>Choose any active or pending rental from the left to view dynamic QR code, 4-digit OTP, or perform instant campus verification.</p>
+            </div>
+
+            <!-- Dynamic Handshake Verification Pane -->
+            <div class="handshake-active-pane hidden" id="handshakeActivePane">
+              <!-- Dynamically populated -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= SECTION: CAMPUS CHAT (100% Functional & Real-Time) ================= -->
+    <section id="tab-chat" class="tab-section">
+      <div class="chat-container-card">
+        <div class="chat-sidebar">
+          <div class="chat-sidebar-header">
+            <h3>💬 RKGIT Campus Chats</h3>
+            <span class="chat-safe-badge">🔒 Live Verified</span>
+          </div>
+          <div class="chat-conversations-list" id="chatConversationsList">
+            <!-- Populated by JS -->
+          </div>
+        </div>
+
+        <div class="chat-main-window" id="chatMainWindow">
+          <div class="chat-header" id="chatHeader">
+            <div class="chat-user-profile">
+              <span class="chat-avatar" id="activeChatAvatar">🏛️</span>
+              <div>
+                <h4 id="activeChatName">RKGIT Campus Peer Board</h4>
+                <span class="chat-status-text" id="activeChatStatus">Open Community Discussion</span>
+              </div>
+            </div>
+            <div class="chat-quick-actions">
+              <button class="btn-sm-action" id="btnGoToHandshake">🤝 Open Handshake</button>
+            </div>
+          </div>
+
+          <div class="chat-messages-scroll" id="chatMessagesScroll">
+            <!-- Messages rendered by JS -->
+          </div>
+
+          <!-- Quick Campus Replies -->
+          <div class="chat-quick-replies" id="chatQuickReplies">
+            <button class="chip-reply">☕ I'm at the Canteen Nescafe counter!</button>
+            <button class="chip-reply">⏱️ Practical exam in 10 mins! Arriving now.</button>
+            <button class="chip-reply">📲 I have the Handshake OTP / QR ready!</button>
+            <button class="chip-reply">📖 Let's meet at Central Library entrance.</button>
+          </div>
+
+          <form class="chat-input-row" id="formSendChat">
+            <input type="text" id="chatInputText" placeholder="Type a message (e.g. 'I am at Canteen Nescafe counter with the item')..." autocomplete="off" required>
+            <button type="submit" class="btn-send-chat" id="btnSendChatSubmit">Send 📨</button>
+          </form>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= SECTION: SHARING ECONOMY & IMPACT ================= -->
+    <section id="tab-impact" class="tab-section">
+      <div class="impact-hero">
+        <span class="impact-badge">THE IMPACT – SHARING ECONOMY</span>
+        <h2>Builds Trust | Saves Money | Reduces Waste</h2>
+        <p>Empowering the Raj Kumar Goel Institute of Technology (RKGIT) campus community through circular resource sharing.</p>
+      </div>
+
+      <!-- Live Counters -->
+      <div class="stats-counters-grid">
+        <div class="stat-card">
+          <div class="stat-icon-wrap bg-green">💰</div>
+          <div class="stat-content">
+            <div class="stat-num" id="statSaved">₹18,450</div>
+            <div class="stat-lbl">Saved by RKGIT Students</div>
+            <div class="stat-sub">Versus buying brand-new equipment</div>
+          </div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-icon-wrap bg-purple">💵</div>
+          <div class="stat-content">
+            <div class="stat-num" id="statEarned">₹8,920</div>
+            <div class="stat-lbl">Hostel Pocket Money Earned</div>
+            <div class="stat-sub">From idle calculators, lab coats & tools</div>
+          </div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-icon-wrap bg-blue">🤝</div>
+          <div class="stat-content">
+            <div class="stat-num" id="statHandshakes">142</div>
+            <div class="stat-lbl">Safe Campus Handshakes</div>
+            <div class="stat-sub">Verified via Dynamic OTP & QR code</div>
+          </div>
+        </div>
+
+        <div class="stat-card">
+          <div class="stat-icon-wrap bg-emerald">♻️</div>
+          <div class="stat-content">
+            <div class="stat-num" id="statWaste">58 kg</div>
+            <div class="stat-lbl">E-Waste & Plastic Averted</div>
+            <div class="stat-sub">Through circular borrowing & reuse</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Campus Spot & Trust Highlights -->
+      <div class="impact-columns-grid">
+        <div class="impact-col-card">
+          <h3>🏛️ Official RKGIT Handshake Spots</h3>
+          <p>Verified physical exchange stations across the Ghaziabad campus:</p>
+          <ul class="campus-spot-list">
+            <li>
+              <strong>☕ Central Campus Canteen & Nescafe</strong>
+              <span>Highest frequency spot between lecture hours & labs.</span>
+            </li>
+            <li>
+              <strong>📖 Central Library Front Lawn</strong>
+              <span>Quiet study material, books & calculator exchanges.</span>
+            </li>
+            <li>
+              <strong>🏢 Academic Block A/B/C Corridors</strong>
+              <span>5-minute emergency handovers before practical labs.</span>
+            </li>
+            <li>
+              <strong>🚪 Boys Hostel 1 & 2 / Girls Hostel 1 Gates</strong>
+              <span>Night-before exam handshakes and weekend rentals.</span>
+            </li>
+          </ul>
+        </div>
+
+        <div class="impact-col-card">
+          <h3>🛡️ Trust & Safety Architecture</h3>
+          <p>How Campus Share guarantees student safety and zero asset loss:</p>
+          <div class="security-steps">
+            <div class="sec-step">
+              <span class="sec-step-num">1</span>
+              <div>
+                <strong>Strict RKGIT Mobile OTP Authentication</strong>
+                <p>Every account is linked with verified student phone number and department.</p>
+              </div>
+            </div>
+            <div class="sec-step">
+              <span class="sec-step-num">2</span>
+              <div>
+                <strong>Dynamic 60s Refresh OTP & QR</strong>
+                <p>Codes change dynamically to eliminate screenshots or spoofing.</p>
+              </div>
+            </div>
+            <div class="sec-step">
+              <span class="sec-step-num">3</span>
+              <div>
+                <strong>Automated Safety Deposit Escrow</strong>
+                <p>Borrower deposit is held safely and unlocked only upon return handshake.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= SECTION: COMIC WALKTHROUGH ================= -->
+    <section id="tab-comic" class="tab-section">
+      <div class="comic-header-card">
+        <span class="comic-tag">ORIGINAL STORYBOARD</span>
+        <h2>How It Works: Simple 4-Step Sharing on Campus</h2>
+        <p>Interactive walkthrough based on the comic infographic design.</p>
+      </div>
+
+      <div class="comic-steps-timeline">
+        <div class="comic-panel-card">
+          <div class="step-ribbon">STEP 1: LIST OR SEARCH</div>
+          <div class="comic-panel-body">
+            <div class="comic-illustration-box">
+              <div class="comic-icon">📱 🧮 🥼</div>
+              <div class="comic-speech">
+                <em>"Need a lab coat and calculator today! Search: Calculator"</em>
+              </div>
+              <div class="comic-hostel-desk">
+                <em>"Listing Hostel desk. Adding: fast and free!"</em>
+              </div>
+            </div>
+            <h4>List or Search in Seconds</h4>
+            <p>Lenders list unused items right from their hostel room desk with photos and daily rate. Borrowers with last-minute exam requirements search and find nearby items instantly.</p>
+            <button class="btn-comic-action" data-jump="browse">Try Searching Items →</button>
+          </div>
+        </div>
+
+        <div class="comic-panel-card">
+          <div class="step-ribbon">STEP 2: REQUEST & CONFIRM</div>
+          <div class="comic-panel-body">
+            <div class="comic-illustration-box">
+              <div class="comic-speech speech-green">
+                <strong>Rental Request from Rohan:</strong><br>
+                Casio fx-991ES calculator for 1 day.<br>
+                <span class="badge-accept-demo">ACCEPT ✓</span>
+              </div>
+            </div>
+            <h4>Connect and Chat Safely In-App</h4>
+            <p>Borrower sends a rental request with duration. Lender receives instant notification in cafeteria or room and taps Accept. In-app chat lets them coordinate the campus meetup point.</p>
+            <button class="btn-comic-action" data-jump="chat">Open Campus Chat →</button>
+          </div>
+        </div>
+
+        <div class="comic-panel-card">
+          <div class="step-ribbon">STEP 3: MEET & SCAN</div>
+          <div class="comic-panel-body">
+            <div class="comic-illustration-box">
+              <div class="comic-handshake-ill">
+                <span class="ill-phone">📲 [QR CODE]</span>
+                <span class="ill-arrows">⇄</span>
+                <span class="ill-phone">📲 [OTP 8492]</span>
+              </div>
+              <div class="comic-speech speech-blue">
+                <em>"Dynamic OTP / QR code check-in. Instant verification on meet."</em>
+              </div>
+            </div>
+            <h4>Instant Verification on Meet</h4>
+            <p>Students meet at the designated campus spot (e.g. Canteen Nescafe). The lender or borrower scans the dynamic QR code or enters the 4-digit OTP. The item is safely handed over and deposit locked.</p>
+            <button class="btn-comic-action" data-jump="rentals">View Live Handshake →</button>
+          </div>
+        </div>
+
+        <div class="comic-panel-card">
+          <div class="step-ribbon">STEP 4: USE & RETURN</div>
+          <div class="comic-panel-body">
+            <div class="comic-illustration-box">
+              <div class="comic-icon">📝 🏆 💰</div>
+              <div class="comic-speech speech-gold">
+                <em>"Return and earn! Safety deposits unlocked."</em>
+              </div>
+            </div>
+            <h4>Acing Exams & Unlocking Deposits</h4>
+            <p>The student takes their practical exam with peace of mind. Upon meeting again to return the item, the Return Handshake OTP is verified: the lender gets paid pocket money and the deposit is returned!</p>
+            <button class="btn-comic-action" data-jump="impact">See Campus Impact →</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ================= MODAL 1: MOBILE NUMBER OTP LOGIN PORTAL ================= -->
+  <div class="modal-overlay hidden" id="modalAuth">
+    <div class="modal-card auth-modal-card">
+      <div class="modal-header">
+        <div class="modal-title-wrap">
+          <span class="modal-badge">RKGIT VERIFIED ACCESS</span>
+          <h3>Login via Mobile OTP</h3>
+        </div>
+        <button class="btn-close-modal" id="btnCloseAuthModal">✕</button>
+      </div>
+
+      <div class="modal-body">
+        <p class="auth-intro-txt">
+          Enter your 10-digit mobile number to access your Borrower or Lender portal.
+        </p>
+
+        <!-- Quick 1-Click Test Accounts -->
+        <div class="quick-accounts-box">
+          <span class="quick-acc-lbl">⚡ Quick 1-Click Demo Profiles:</span>
+          <div class="quick-acc-buttons">
+            <button type="button" class="btn-quick-user" data-phone="9876543210" data-role="borrower">
+              <span>👨‍🎓</span>
+              <strong>Rohan (Borrower)</strong>
+              <small>9876543210</small>
+            </button>
+            <button type="button" class="btn-quick-user" data-phone="9812345678" data-role="lender">
+              <span>🧑‍💻</span>
+              <strong>Aman (Hosteler / Lender)</strong>
+              <small>9812345678</small>
+            </button>
+            <button type="button" class="btn-quick-user" data-phone="9898989898" data-role="lender">
+              <span>👩‍🎓</span>
+              <strong>Priya (GH-1 Lender)</strong>
+              <small>9898989898</small>
+            </button>
+          </div>
+        </div>
+
+        <form id="formMobileLogin">
+          <!-- Step 1: Mobile Phone Input -->
+          <div class="form-group" id="groupPhoneInput">
+            <label for="loginPhone">Mobile Number (10 Digits)</label>
+            <div class="phone-input-row">
+              <span class="country-prefix">+91</span>
+              <input type="tel" id="loginPhone" placeholder="Enter 10-digit mobile number" maxlength="10" required value="9876543210">
+              <button type="button" class="btn-send-otp" id="btnSendOtp">Get OTP ➔</button>
+            </div>
+            <small class="helper-text">RKGIT students & hostelers receive instantaneous OTP verification.</small>
+          </div>
+
+          <!-- Step 2: OTP Verification Input -->
+          <div class="form-group hidden" id="groupOtpInput">
+            <div class="otp-alert-banner" id="otpSimulatorAlert">
+              🔔 <strong>SMS Simulator:</strong> Your RKGIT Verification OTP is: <span id="displayedSimulatedOtp" class="bold-otp">4829</span>
+            </div>
+
+            <label for="loginOtp">Enter 4-Digit OTP Code</label>
+            <div class="otp-input-row">
+              <input type="text" id="loginOtp" placeholder="4-Digit OTP" maxlength="4" autocomplete="one-time-code">
+              <button type="submit" class="btn-verify-otp" id="btnVerifyOtp">Verify & Login ✓</button>
+            </div>
+            <div class="otp-resend-row">
+              <span id="otpCountdownTimer">Resend OTP in 30s</span>
+              <button type="button" class="btn-link" id="btnResendOtp">Resend Now</button>
+            </div>
+          </div>
+
+          <!-- Role intent toggle -->
+          <div class="form-group">
+            <label>Login Directly Into:</label>
+            <div class="role-intent-pills">
+              <label class="intent-pill">
+                <input type="radio" name="loginRoleIntent" value="borrower" checked>
+                <span>🎓 Borrower / Buyer Portal</span>
+              </label>
+              <label class="intent-pill">
+                <input type="radio" name="loginRoleIntent" value="lender">
+                <span>💼 Lender / Hosteler Portal</span>
+              </label>
+            </div>
+          </div>
+        </form>
+
+        <!-- Real Physical SMS Gateway Configuration -->
+        <div class="sms-gateway-config-card" style="margin-top: 1rem; border-top: 1px dashed var(--border); padding-top: 0.75rem;">
+          <div class="sms-cfg-header" id="btnToggleSmsConfig" style="display: flex; justify-content: space-between; align-items: center; cursor: pointer; padding: 0.4rem 0;">
+            <span style="font-size: 0.78rem; font-weight: 700; color: var(--secondary);">⚙️ Physical Mobile SMS Gateway</span>
+            <span class="sms-status-pill" id="smsStatusPill" style="font-size: 0.7rem; font-weight: 700; padding: 0.15rem 0.5rem; border-radius: 999px; background: #e2e8f0; color: var(--text-muted);">⚪ Simulator Active</span>
+          </div>
+          <div class="sms-cfg-body hidden" id="smsCfgBody" style="background: #f8fafc; border: 1px solid var(--border); border-radius: 8px; padding: 0.75rem; margin-top: 0.5rem;">
+            <p style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 0.5rem;">
+              Connect <strong>Fast2SMS</strong> to send real physical SMS messages to Indian numbers (+91):
+            </p>
+            <div class="form-group" style="margin-bottom: 0.5rem;">
+              <input type="password" id="inputFast2SmsKey" placeholder="Paste your Fast2SMS API Key here..." style="font-family: var(--font-mono); font-size: 0.8rem; padding: 0.45rem;">
+            </div>
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+              <button type="button" class="btn-primary-lg" style="width: auto; padding: 0.4rem 0.85rem; font-size: 0.75rem;" id="btnSaveSmsKey">Save Key</button>
+              <a href="https://www.fast2sms.com" target="_blank" style="font-size: 0.75rem; color: var(--primary); font-weight: 700;">Get Free Key at Fast2SMS.com ↗</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= MODAL 2: RENT ITEM MODAL ================= -->
+  <div class="modal-overlay hidden" id="modalRentItem">
+    <div class="modal-card">
+      <div class="modal-header">
+        <div class="modal-title-wrap">
+          <span class="modal-badge">STEP 2: REQUEST & CONFIRM</span>
+          <h3 id="modalItemTitle">Rent Casio fx-991ES Plus</h3>
+        </div>
+        <button class="btn-close-modal" id="btnCloseModal">✕</button>
+      </div>
+
+      <div class="modal-body">
+        <div class="modal-item-summary">
+          <img id="modalItemImg" src="" alt="Item">
+          <div class="modal-item-details">
+            <div class="modal-owner-line">
+              <span>Lender:</span> <strong id="modalOwnerName">Aman Verma</strong> (<span id="modalOwnerHostel">BH-2</span>)
+            </div>
+            <div class="modal-condition-line">
+              <span>Condition:</span> <span id="modalItemCondition">Like New</span>
+            </div>
+            <div class="modal-price-line">
+              <span class="modal-rent-chip">₹<span id="modalDailyRate">25</span>/day</span>
+              <span class="modal-dep-chip">Deposit: ₹<span id="modalDepositRate">100</span> (Refundable)</span>
+            </div>
+          </div>
+        </div>
+
+        <form id="formSubmitRental">
+          <input type="hidden" id="modalItemId">
+
+          <div class="form-group">
+            <label for="rentDuration">Rental Duration (Days)</label>
+            <div class="duration-selector">
+              <button type="button" class="btn-duration active" data-days="1">1 Day (Practical Exam)</button>
+              <button type="button" class="btn-duration" data-days="2">2 Days</button>
+              <button type="button" class="btn-duration" data-days="3">3 Days</button>
+              <button type="button" class="btn-duration" data-days="7">1 Week</button>
+            </div>
+            <input type="hidden" id="rentDurationDays" value="1">
+          </div>
+
+          <div class="form-group">
+            <label for="rentMeetupSpot">Campus Meetup Spot</label>
+            <select id="rentMeetupSpot" required>
+              <option value="Campus Canteen (Nescafe Counter)">Campus Canteen (Nescafe Counter)</option>
+              <option value="Central Library Entrance">Central Library Entrance</option>
+              <option value="Admin Block Porch">Admin Block Porch</option>
+              <option value="Chemistry & Physics Lab Corridor">Chemistry/Physics Lab Corridor</option>
+              <option value="Main Gate (Estd. 2000 arch)">RKGIT Main Gate</option>
+              <option value="Boys Hostel 2 Gate">Boys Hostel 2 Gate</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="rentNote">Quick Note to Lender</label>
+            <input type="text" id="rentNote" value="Practical exam in 15 mins! Urgent need." placeholder="e.g. Meet in 5 mins near Canteen">
+          </div>
+
+          <!-- Price Calculation Breakdown -->
+          <div class="cost-breakdown-card">
+            <div class="cost-row">
+              <span>Rental Fee (<span id="calcDurationText">1 day</span> × ₹<span id="calcDailyRate">25</span>):</span>
+              <span class="cost-val" id="calcRentTotal">₹25</span>
+            </div>
+            <div class="cost-row">
+              <span>Refundable Safety Deposit:</span>
+              <span class="cost-val" id="calcDepositTotal">₹100</span>
+            </div>
+            <div class="cost-row total-row">
+              <span>Total Payable Now:</span>
+              <span class="cost-val total-val" id="calcGrandTotal">₹125</span>
+            </div>
+            <div class="cost-note">
+              🔒 Safety deposit of ₹<span id="calcDepositNote">100</span> is locked in escrow and automatically refunded to your wallet when you return the item!
+            </div>
+          </div>
+
+          <div class="modal-footer-actions">
+            <button type="button" class="btn-ghost" id="btnCancelRental">Cancel</button>
+            <button type="submit" class="btn-primary-lg">Send Rental Request ➔</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification System -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <!-- Audio Synthesizer (Zero external dependencies) -->
+  <script>
+    window.playAudioTone = function(type) {
+      try {
+        const ctx = new (window.AudioContext || window.webkitAudioContext)();
+        if (type === 'success') {
+          const osc1 = ctx.createOscillator();
+          const osc2 = ctx.createOscillator();
+          const gain = ctx.createGain();
+          osc1.type = 'sine';
+          osc2.type = 'triangle';
+          osc1.frequency.setValueAtTime(587.33, ctx.currentTime);
+          osc1.frequency.setValueAtTime(880, ctx.currentTime + 0.12);
+          osc2.frequency.setValueAtTime(293.66, ctx.currentTime);
+          osc2.frequency.setValueAtTime(440, ctx.currentTime + 0.12);
+          gain.gain.setValueAtTime(0.2, ctx.currentTime);
+          gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.6);
+          osc1.connect(gain); osc2.connect(gain); gain.connect(ctx.destination);
+          osc1.start(); osc2.start();
+          osc1.stop(ctx.currentTime + 0.6); osc2.stop(ctx.currentTime + 0.6);
+        } else if (type === 'message') {
+          const osc = ctx.createOscillator();
+          const gain = ctx.createGain();
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(440, ctx.currentTime);
+          osc.frequency.exponentialRampToValueAtTime(880, ctx.currentTime + 0.1);
+          gain.gain.setValueAtTime(0.15, ctx.currentTime);
+          gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.15);
+          osc.connect(gain); gain.connect(ctx.destination);
+          osc.start(); osc.stop(ctx.currentTime + 0.15);
+        }
+      } catch (e) {}
+    };
+  </script>
+
+  <!-- Scripts -->
+  <script src="qrcode.js"></script>
+  <script src="app.js?v=3"></script>
+</body>
+</html>

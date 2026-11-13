@@ -1,0 +1,9 @@
+{
+  "provider": "fast2sms",
+  "fast2smsApiKey": "",
+  "twilio": {
+    "accountSid": "",
+    "authToken": "",
+    "fromPhone": ""
+  }
+}
